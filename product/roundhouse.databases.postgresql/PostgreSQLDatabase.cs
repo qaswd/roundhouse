@@ -107,8 +107,9 @@ namespace roundhouse.databases.postgresql
 
         public override string create_database_script()
         {
-            return string.Format("CREATE DATABASE {0};", database_name);
+            return string.Format("CREATE DATABASE \"{0}\";", database_name);
 
+            // Does require plugin -> dblink_exec
             //            return string.Format(
             //                @"
             //--CREATE FUNCTION RH_CreateDb() RETURNS void AS $$
