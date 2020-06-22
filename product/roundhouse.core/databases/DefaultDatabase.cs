@@ -128,9 +128,18 @@ namespace roundhouse.databases
             }
             catch (Exception ex)
             {
-                Log.bound_to(this).log_a_warning_event_containing(
-                    "{0} with provider {1} does not provide a facility for creating a database at this time.{2}{3}",
-                    GetType(), provider, Environment.NewLine, ex.to_string());
+                if (ex.Message.Contains("42P04") && ex.Message.Contains(" already exists"))
+                {
+                    Log.bound_to(this).log_an_info_event_containing("{0} with provider {1} does not provide a facility for creating a database at this time.{2}{3}. This is known bug, but not impairing functionality, except scripts don't have knowledge whatever database was created or already existed",
+                                        GetType(), provider, Environment.NewLine, ex.Message);
+                }
+                else
+                {
+                    Log.bound_to(this).log_a_warning_event_containing(
+                                        "{0} with provider {1} does not provide a facility for creating a database at this time.{2}{3}",
+                                        GetType(), provider, Environment.NewLine, ex.Message);
+                }
+
             }
 
             return database_was_created;
